@@ -1,0 +1,20 @@
+{
+	"crons": [
+		{
+			"path": "/api/email",
+			"schedule": "0 7 * * *",
+			"method": "POST",
+			"headers": {
+				"Authorization": "Bearer ${EMAIL_TOKEN}"
+			}
+		},
+		{
+			"path": "/api/ingest",
+			"schedule": "15 */6 * * *",
+			"method": "POST",
+			"headers": {
+				"Authorization": "Bearer ${INGEST_TOKEN}"
+			}
+		}
+	]
+}

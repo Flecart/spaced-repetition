@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
   const db = getDb();
 
   const repo = normalizeRepo(cfg.githubMirrorRepo);
+  console.log(JSON.stringify({ event: "ingest.start", repo, branch: cfg.githubBranch }));
   const files = await fetchMirrorPaths(repo, cfg.githubBranch, cfg.githubToken);
   const mdFiles = files.filter(f => f.path.endsWith(".md"));
 
@@ -72,8 +73,8 @@ export async function POST(req: NextRequest) {
       upserted += 1;
     }
   }
-
-  return NextResponse.json({ upserted });
+  console.log(JSON.stringify({ event: "ingest.done", files: mdFiles.length, chunks: upserted }));
+  return NextResponse.json({ upserted, files: mdFiles.length });
 }
 
 

@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
   }
 
   const db = getDb();
+  console.log(JSON.stringify({ event: "email.start" }));
   const due = (
     await db.query(
       `select c.id, c.title from srs_state s join chunks c on c.id = s.id
@@ -26,6 +27,7 @@ export async function POST(req: NextRequest) {
 
   const subject = `Suggester – ${due.length} item(s) due`;
   await sendDailyEmail(subject, html);
+  console.log(JSON.stringify({ event: "email.done", count: due.length }));
   return NextResponse.json({ sent: true, count: due.length });
 }
 
