@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { sendDailyEmail } from "@/lib/email";
 import { loadConfig } from "@/lib/config";
-import { zonedTimeToUtc } from "date-fns-tz";
 
 export async function POST(req: NextRequest) {
   const cfg = loadConfig();

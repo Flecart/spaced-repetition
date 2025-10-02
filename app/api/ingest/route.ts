@@ -4,6 +4,18 @@ import { getDb, migrate } from "@/lib/db";
 import { chunkMarkdown } from "@/lib/chunk";
 import crypto from "node:crypto";
 
+function normalizeRepo(input: string): string {
+  // Accept forms like owner/name or full URLs
+  if (input.includes("github.com")) {
+    try {
+      const u = new URL(input);
+      const parts = u.pathname.replace(/^\//, '').split('/');
+      if (parts.length >= 2) return `${parts[0]}/${parts[1].replace(/\.git$/, '')}`;
+    } catch {}
+  }
+  return input.replace(/^\//, '').replace(/\.git$/, '');
+}
+
 async function fetchMirrorPaths(repo: string, branch: string, token: string): Promise<{ path: string; type: string }[]> {
   const res = await fetch(`https://api.github.com/repos/${repo}/git/trees/${encodeURIComponent(branch)}?recursive=1`, {
     headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" },
@@ -14,8 +26,8 @@ async function fetchMirrorPaths(repo: string, branch: string, token: string): Pr
   return (data.tree || []).filter((t: any) => t.type === "blob").map((t: any) => ({ path: t.path as string, type: t.type as string }));
 }
 
-async function fetchFile(repo: string, path: string, token: string): Promise<string> {
-  const res = await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}`, {
+async function fetchFile(repo: string, path: string, token: string, branch: string): Promise<string> {
+  const res = await fetch(`https://raw.githubusercontent.com/${repo}/${encodeURIComponent(branch)}/${path}`, {
     headers: { Authorization: `Bearer ${token}` },
     cache: "no-store"
   });
@@ -33,12 +45,13 @@ export async function POST(req: NextRequest) {
   await migrate();
   const db = getDb();
 
-  const files = await fetchMirrorPaths(cfg.githubMirrorRepo, cfg.githubBranch, cfg.githubToken);
+  const repo = normalizeRepo(cfg.githubMirrorRepo);
+  const files = await fetchMirrorPaths(repo, cfg.githubBranch, cfg.githubToken);
   const mdFiles = files.filter(f => f.path.endsWith(".md"));
 
   let upserted = 0;
   for (const f of mdFiles) {
-    const content = await fetchFile(cfg.githubMirrorRepo, f.path, cfg.githubToken);
+    const content = await fetchFile(repo, f.path, cfg.githubToken, cfg.githubBranch);
     const chunks = chunkMarkdown(f.path, content);
 
     for (const c of chunks) {

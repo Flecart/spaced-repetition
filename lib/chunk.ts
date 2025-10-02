@@ -1,4 +1,4 @@
-import { unified } from "remark";
+import { unified } from "unified";
 import remarkParse from "remark-parse";
 import { visit } from "unist-util-visit";
 import crypto from "node:crypto";
