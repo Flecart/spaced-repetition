@@ -12,14 +12,14 @@ export type AppConfig = {
 
 export function loadConfig(): AppConfig {
   const cfg: AppConfig = {
-    githubMirrorRepo: process.env.GITHUB_MIRROR_REPO || "",
+    githubMirrorRepo: process.env.GITHUB_MIRROR_REPO || "https://github.com/Flecart/mirror-notes",
     githubBranch: process.env.GITHUB_MIRROR_BRANCH || "main",
     githubToken: process.env.GITHUB_TOKEN || "",
     emailTo: process.env.EMAIL_TO || "hxuanqiang@ethz.ch",
-    emailFrom: process.env.EMAIL_FROM || "",
+    emailFrom: process.env.EMAIL_FROM || "onboarding@resend.dev",
     timezone: process.env.TIMEZONE || "Europe/Zurich",
     dailySendHour: Number(process.env.DAILY_SEND_HOUR || 9),
-    dailyNewLimit: Number(process.env.DAILY_NEW_LIMIT || 20),
+    dailyNewLimit: Number(process.env.DAILY_NEW_LIMIT || 100),
     databaseUrl: process.env.DATABASE_URL || ""
   };
 
