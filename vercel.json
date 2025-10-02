@@ -10,7 +10,7 @@
 		},
 		{
 			"path": "/api/ingest",
-			"schedule": "15 */6 * * *",
+			"schedule": "0 5 * * *",
 			"method": "POST",
 			"headers": {
 				"Authorization": "Bearer ${INGEST_TOKEN}"
