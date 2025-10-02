@@ -1,0 +1,35 @@
+{
+  "name": "suggester",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0",
+    "date-fns-tz": "^3.2.0",
+    "next": "^14.2.5",
+    "pg": "^8.12.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remark": "^15.0.1",
+    "remark-parse": "^11.0.0",
+    "resend": "^3.2.0",
+    "tar-stream": "^3.1.7",
+    "undici": "^6.19.8",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.3.3",
+    "@types/unist": "^2.0.10",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.5",
+    "typescript": "^5.5.4"
+  }
+}
+
