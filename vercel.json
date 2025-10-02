@@ -2,19 +2,11 @@
 	"crons": [
 		{
 			"path": "/api/email",
-			"schedule": "0 7 * * *",
-			"method": "POST",
-			"headers": {
-				"Authorization": "Bearer ${EMAIL_TOKEN}"
-			}
+			"schedule": "0 7 * * *"
 		},
 		{
 			"path": "/api/ingest",
-			"schedule": "0 5 * * *",
-			"method": "POST",
-			"headers": {
-				"Authorization": "Bearer ${INGEST_TOKEN}"
-			}
+			"schedule": "0 5 * * *"
 		}
 	]
 }

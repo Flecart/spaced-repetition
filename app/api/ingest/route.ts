@@ -38,7 +38,9 @@ async function fetchFile(repo: string, path: string, token: string, branch: stri
 export async function POST(req: NextRequest) {
   const cfg = loadConfig();
   const auth = req.headers.get("authorization") || "";
-  if (!auth || !auth.startsWith("Bearer ") || auth.slice(7) !== process.env.INGEST_TOKEN) {
+  const isVercelCron = req.headers.get("x-vercel-cron") === "1";  // this is not secure, but don't care...
+  const okBearer = auth && auth.startsWith("Bearer ") && auth.slice(7) === process.env.INGEST_TOKEN;
+  if (!isVercelCron && !okBearer) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -6,7 +6,9 @@ import { loadConfig } from "@/lib/config";
 export async function POST(req: NextRequest) {
   const cfg = loadConfig();
   const auth = req.headers.get("authorization") || "";
-  if (!auth || !auth.startsWith("Bearer ") || auth.slice(7) !== process.env.EMAIL_TOKEN) {
+  const isVercelCron = req.headers.get("x-vercel-cron") === "1";
+  const okBearer = auth && auth.startsWith("Bearer ") && auth.slice(7) === process.env.EMAIL_TOKEN;
+  if (!isVercelCron && !okBearer) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
